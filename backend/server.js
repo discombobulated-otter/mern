@@ -1,36 +1,21 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
-import Product from './models/product.model.js'; // Import the Product model
-
+import productRoute from './routes/product.route.js';
+import router from './routes/product.route.js';
 dotenv.config();
 
 const app = express();
 
 app.use(express.json()); // allows us to accept json data in the request body
 
-app.post("/api/products", async (req,res)=>{
-   const product = req.body; // user will send this data
-   if (!product.name || !product.price || !product.image) {
-       return res.status(400).json({ success: false, message: "Please provide all required fields" });
-   }
+app.use("/api/products", productRoute); // this is the route for products
 
-   const newProduct = new Product(product)
-   try 
-   {
-    await newProduct.save();
-    res.status(201).json({ success: true, data: newProduct });
-   } catch (error) 
-   {
-    console.error(error.message);
-    res.status(500).json({ success: false, message: "Server Error" }); 
-   }
-});
-console.log(process.env.MONGO_URI);
 
-// postman 
-app.listen(5000,()=>{
+// this just to check if the server is running or not and changes in the code are being reflected or not
+app.listen(process.env.PORT || 5000,()=>{
     connectDB();
     console.log("connected to db");
-    console.log("server started at http://localhost:5000");
+    console.log(`server started at http://localhost:${process.env.PORT}`);
 });
+// 56:35
