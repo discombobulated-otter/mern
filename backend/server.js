@@ -14,8 +14,10 @@ app.use("/api/products", productRoute); // this is the route for products
 
 // this just to check if the server is running or not and changes in the code are being reflected or not
 app.listen(process.env.PORT || 5000,()=>{
-    connectDB();
-    console.log("connected to db");
+    const dbConnected = connectDB();
+    if (dbConnected) {
+        console.log("connected to db");
+    }
     console.log(`server started at http://localhost:${process.env.PORT}`);
 });
 // 56:35
